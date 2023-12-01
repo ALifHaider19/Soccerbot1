@@ -1,0 +1,218 @@
+int motorA1pwm=5;
+int motorA2pwm=6;
+int motorA1en=7;
+int motorA2en=8;
+
+int motorB1pwm=11;
+int motorB2pwm=10;
+int motorB1en=12;
+int motorB2en=13;
+
+int carSpeed=200;
+
+char SerailA;
+
+
+
+void setup() {
+  
+
+  pinMode(motorA1pwm,OUTPUT);
+  pinMode(motorA2pwm,OUTPUT);
+  pinMode(motorA1en,OUTPUT);
+  pinMode(motorA2en,OUTPUT);
+
+  pinMode(motorB1pwm,OUTPUT);
+  pinMode(motorB2pwm,OUTPUT);
+  pinMode(motorB1en,OUTPUT);
+  pinMode(motorB2en,OUTPUT);
+
+  Serial.begin(9600);
+
+}
+
+void loop() {
+  if(Serial.available()>0)
+  {
+    SerailA=Serial.read();
+  }
+
+  switch(SerailA)
+  {
+    case 'F':
+            forward();
+            break;
+    case 'B':
+            backward();
+            break;
+    case 'L':
+            left();
+            break;
+    case 'R':
+            right();
+            break;
+   case 'G':
+            forward_left();
+            break;
+   case 'I':
+            forward_right();
+            break; 
+
+   case 'H':
+            backward_left();
+            break;  
+   case 'J':
+            backward_right();
+            break;
+
+
+ 
+
+           
+   case '0' :
+            carSpeed=0;
+            break;
+
+   case '1' :
+            carSpeed=25; 
+            break;
+
+   case '2' :
+            carSpeed=50;
+            break;
+            
+   case '3' :
+            carSpeed=75;
+            break;
+
+   case '4' :
+            carSpeed=100; 
+            break;
+
+   case '5' :
+            carSpeed=125;
+            break;
+
+   case '6' :
+            carSpeed=150; 
+            break;
+
+   case '7' :
+            carSpeed=175;
+            break;
+            
+   case '8' :
+            carSpeed=200;
+            break;
+
+   case '9' :
+            carSpeed=225; 
+            break;
+
+   case 'q' :
+            carSpeed=255;
+            break;                 
+                    
+   default :
+            Stop();
+            break;
+
+                                         
+  }
+
+ 
+
+}
+
+void forward(){
+  motorFunction();
+  analogWrite(motorA1pwm,0);
+  analogWrite(motorA2pwm,carSpeed);
+  analogWrite(motorB1pwm,0);
+  analogWrite(motorB2pwm,carSpeed);
+
+ 
+  Serial.println("Forward");
+}
+
+void backward(){
+  motorFunction();
+  analogWrite(motorA2pwm,0);
+  analogWrite(motorA1pwm,carSpeed);
+  analogWrite(motorB2pwm,0);
+  analogWrite(motorB1pwm,carSpeed);  
+}
+
+void left(){
+   motorFunction();
+
+  analogWrite(motorB2pwm,carSpeed);
+  analogWrite(motorB1pwm,0);
+  analogWrite(motorA1pwm,carSpeed);
+  analogWrite(motorA2pwm,0); 
+}
+
+
+void forward_left(){
+   motorFunction();
+
+  analogWrite(motorB2pwm,carSpeed);
+  analogWrite(motorB1pwm,0);
+  analogWrite(motorA1pwm,0);
+  analogWrite(motorA2pwm,0); 
+}
+
+
+void right(){
+   motorFunction();
+
+  analogWrite(motorB1pwm,carSpeed);
+  analogWrite(motorB2pwm,0);
+  analogWrite(motorA2pwm,carSpeed);
+  analogWrite(motorA1pwm,0); 
+}
+
+void forward_right(){
+   motorFunction();
+
+  analogWrite(motorB1pwm,0);
+  analogWrite(motorB2pwm,0);
+  analogWrite(motorA2pwm,carSpeed);
+  analogWrite(motorA1pwm,0); 
+}
+
+void backward_right(){
+   motorFunction();
+
+  analogWrite(motorB2pwm,0);
+  analogWrite(motorB1pwm,carSpeed);
+  analogWrite(motorA2pwm,0);
+  analogWrite(motorA1pwm,0); 
+}
+
+void backward_left(){
+   motorFunction();
+
+  analogWrite(motorB2pwm,0);  analogWrite(motorB1pwm,0);
+  analogWrite(motorA2pwm,0);
+  analogWrite(motorA1pwm,carSpeed); 
+}
+
+void motorFunction(){
+    digitalWrite(motorA1en,HIGH);
+    digitalWrite(motorA2en,HIGH);
+    digitalWrite(motorB1en,HIGH);
+    digitalWrite(motorB2en,HIGH);
+}
+
+void Stop()
+{
+  motorFunction();
+
+  Serial.println("Stop");
+
+  analogWrite(motorB2pwm,0);
+  analogWrite(motorB1pwm,0);
+  analogWrite(motorA2pwm,0);
+  analogWrite(motorA1pwm,0); 
+}
